@@ -9,6 +9,7 @@
 
    <modules>
       <module>icloud-client</module>
+      <module>graph</module>
    </modules>
 
 </project>

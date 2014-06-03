@@ -1,0 +1,24 @@
+{
+    "Reminders": [
+        {
+            "startDate": null,
+            "description": null,
+            "recurrence": null,
+            "title": "Lampes de chevet",
+            "lastModifiedDate": [20140519, 2014, 5, 19, 4, 45, 285],
+            "pGuid": "tasks",
+            "createdDateExtended": 422139501,
+            "dueDate": null,
+            "priority": null,
+            "etag": "C=1623@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+            "dueDateIsAllDay": false,
+            "startDateTz": null,
+            "createdDate": [ 20140519, 2014, 5, 19, 4, 45, 285 ],
+            "alarms": [],
+            "startDateIsAllDay": true,
+            "completedDate": null,
+            "guid": "1A6CE4B1-98ED-459F-ABA3-3301B43D9EC1",
+            "order": 422139501
+        }
+    ]
+}
