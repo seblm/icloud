@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="highcharts.js"></script>
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Tasks'
+                },
+                xAxis: {
+                    categories: ['first date', 'second date', 'last date']
+                },
+                yAxis: {
+                    title: {
+                        text: 'stacked tasks'
+                    }
+                },
+                series: [
+                    {
+                        name: 'buy things',
+                        data: [1, null, null]
+                    },
+                    {
+                        name: 'working',
+                        data: [null, 1, 1]
+                    },
+                    {
+                        name: 'sleeping',
+                        data: [null, null, 2]
+                    }
+                ]
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="container" style="width:100%; height:400px;"></div>
+</body>
+</html>
