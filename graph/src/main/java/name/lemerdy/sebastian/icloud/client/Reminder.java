@@ -11,9 +11,13 @@ public class Reminder {
     @JsonDeserialize(using = ICloudDateTimeDeserializer.class)
     public final ZonedDateTime createdDate;
 
+    public final String title;
+
     public Reminder(@JsonProperty("guid") String guid,
-                    @JsonProperty("createdDate") ZonedDateTime createdDate) {
+                    @JsonProperty("createdDate") ZonedDateTime createdDate,
+                    @JsonProperty("title") String title) {
         this.guid = guid;
         this.createdDate = createdDate;
+        this.title = title;
     }
 }

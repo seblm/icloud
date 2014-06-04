@@ -41,4 +41,11 @@ public class ReminderGraphTest {
 
         assertThat(reminder.createdDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)).isEqualTo("2014-05-19T04:45:00");
     }
+
+    @Test
+    public void should_read_title() {
+        Reminder reminder = reminderGraph.getByGuid("1A6CE4B1-98ED-459F-ABA3-3301B43D9EC1");
+
+        assertThat(reminder.title).isEqualTo("Lampes de chevet");
+    }
 }
