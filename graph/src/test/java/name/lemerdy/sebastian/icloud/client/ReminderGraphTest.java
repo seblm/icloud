@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ReminderGraphTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-    
+
     private ReminderGraph reminderGraph;
 
     @Before
