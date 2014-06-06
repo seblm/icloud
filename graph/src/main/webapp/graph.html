@@ -1,45 +1,868 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <script src="jquery-2.1.1.min.js"></script>
-    <script src="highcharts.js"></script>
-    <script>
-        $(function () {
-            $('#container').highcharts({
-                chart: {
-                    type: 'area'
-                },
-                title: {
-                    text: 'Tasks'
-                },
-                xAxis: {
-                    categories: ['first date', 'second date', 'last date']
-                },
-                yAxis: {
-                    title: {
-                        text: 'stacked tasks'
-                    }
-                },
-                series: [
-                    {
-                        name: 'buy things',
-                        data: [1, null, null]
-                    },
-                    {
-                        name: 'working',
-                        data: [null, 1, 1]
-                    },
-                    {
-                        name: 'sleeping',
-                        data: [null, null, 2]
-                    }
-                ]
-            });
-        });
-    </script>
+    <style>
+        .chart div {
+            font: 10px sans-serif;
+            background-color: steelblue;
+            text-align: right;
+            padding: 3px;
+            margin: 1px;
+            color: white;
+            float: left;
+        }
+    </style>
 </head>
 <body>
-<div id="container" style="width:100%; height:400px;"></div>
+<div class="chart"></div>
+<script src="d3.v3.min.js"></script>
+<script>
+var startup = {
+        "Reminders": [
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Lampes de chevet",
+                "lastModifiedDate": [20140519, 2014, 5, 19, 4, 45, 285],
+                "pGuid": "tasks",
+                "createdDateExtended": 422139501,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1623@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [ 20140519, 2014, 5, 19, 4, 45, 285 ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "1A6CE4B1-98ED-459F-ABA3-3301B43D9EC1",
+                "order": 422139501
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "virer le profile it",
+                "lastModifiedDate": [20140527, 2014, 5, 27, 7, 59, 479],
+                "pGuid": "tasks",
+                "createdDateExtended": 422866308,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1653@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    7,
+                    59,
+                    479
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "3379977C-E6BA-4C75-AE5E-F4854A29A937",
+                "order": null
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "d\u00e9clarer mes imp\u00f4ts",
+                "lastModifiedDate": [
+                    20140526,
+                    2014,
+                    5,
+                    26,
+                    21,
+                    4,
+                    1264
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422831073,
+                "dueDate": null,
+                "priority": 0,
+                "etag": "C=1651@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140526,
+                    2014,
+                    5,
+                    26,
+                    21,
+                    4,
+                    1264
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "3928BF9D-EAE8-46FC-8B53-676388DBCB6C",
+                "order": null
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Appeler Lolo pour son stage en juin",
+                "lastModifiedDate": [
+                    20140519,
+                    2014,
+                    5,
+                    19,
+                    16,
+                    48,
+                    1008
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422210920,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1625@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140519,
+                    2014,
+                    5,
+                    19,
+                    16,
+                    48,
+                    1008
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "3E7F35A7-3CEA-4772-853F-1143BBA34B36",
+                "order": 422210920
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Facture MacBook Pro Xebia \u00e0 Nadia",
+                "lastModifiedDate": [
+                    20140414,
+                    2014,
+                    4,
+                    14,
+                    21,
+                    2,
+                    1262
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 419159652,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1508@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140414,
+                    2014,
+                    4,
+                    14,
+                    9,
+                    14,
+                    554
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "6E9801B8-7698-45A8-A74B-08C7E83C40BE",
+                "order": 408657728
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Rappeler Olivier Lecointe",
+                "lastModifiedDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    21,
+                    49,
+                    1309
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422920160,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1656@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    21,
+                    49,
+                    1309
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "71F0B8DB-EDAF-49EC-897A-D93EC33B7726",
+                "order": 422920160
+            },
+//            {
+//                "startDate": [
+//                    20140530,
+//                    2014,
+//                    5,
+//                    30,
+//                    10,
+//                    30,
+//                    630
+//                ],
+//                "description": null,
+//                "recurrence": {
+//                    "count": null,
+//                    "byDay": null,
+//                    "byMonth": null,
+//                    "weekStart": "MO",
+//                    "interval": 1,
+//                    "weekDays": [
+//                        "FR"
+//                    ],
+//                    "frequencyDays": null,
+//                    "freq": "weekly",
+//                    "until": null
+//                },
+//                "title": "Remplir mon CRA",
+//                "lastModifiedDate": [
+//                    20140523,
+//                    2014,
+//                    5,
+//                    23,
+//                    20,
+//                    52,
+//                    1252
+//                ],
+//                "pGuid": "tasks",
+//                "createdDateExtended": 401599962,
+//                "dueDate": [
+//                    20140530,
+//                    2014,
+//                    5,
+//                    30,
+//                    10,
+//                    30,
+//                    630
+//                ],
+//                "priority": null,
+//                "etag": "C=1649@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+//                "dueDateIsAllDay": false,
+//                "startDateTz": "Europe/Paris",
+//                "createdDate": [
+//                    20130923,
+//                    2013,
+//                    9,
+//                    23,
+//                    3,
+//                    32,
+//                    212
+//                ],
+//                "alarms": [
+//                    {
+//                        "description": "Rappel",
+//                        "isLocationBased": false,
+//                        "proximity": null,
+//                        "messageType": "message",
+//                        "onDate": [
+//                            20140530,
+//                            2014,
+//                            5,
+//                            30,
+//                            10,
+//                            30,
+//                            630
+//                        ],
+//                        "measurement": null,
+//                        "guid": "39C357F0-1B43-47AF-B77A-C2D03529BCCD"
+//                    }
+//                ],
+//                "startDateIsAllDay": false,
+//                "completedDate": null,
+//                "guid": "77BB5952-42A6-4CE3-B232-CE986A97E842",
+//                "order": 401600149
+//            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Xebia essentials sans frais de port ?",
+                "lastModifiedDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    13,
+                    49,
+                    829
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422891373,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1655@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    13,
+                    49,
+                    829
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "850B6C2B-087B-4CB0-8A05-D5025B956849",
+                "order": 422891373
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Galactose Vidal alerte sur tiorfan",
+                "lastModifiedDate": [
+                    20140416,
+                    2014,
+                    4,
+                    16,
+                    17,
+                    49,
+                    1069
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 416567073,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1514@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140315,
+                    2014,
+                    3,
+                    15,
+                    9,
+                    4,
+                    544
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "988EA3C7-0D0F-49C8-8CD6-71D6F91B9F0C",
+                "order": 408657729
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Mail rh Xebia",
+                "lastModifiedDate": [
+                    20140522,
+                    2014,
+                    5,
+                    22,
+                    7,
+                    26,
+                    446
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422436380,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1641@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140522,
+                    2014,
+                    5,
+                    22,
+                    7,
+                    26,
+                    446
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "A196FC4C-21E6-4CCE-8BD0-AED34AE7F072",
+                "order": 422436380
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "not your fathers java",
+                "lastModifiedDate": [
+                    20140507,
+                    2014,
+                    5,
+                    7,
+                    12,
+                    40,
+                    760
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 421159200,
+                "dueDate": null,
+                "priority": 0,
+                "etag": "C=1577@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140507,
+                    2014,
+                    5,
+                    7,
+                    12,
+                    40,
+                    760
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "A3D50A9B-B8E4-47A3-B92F-BAC7F7B14D15",
+                "order": null
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Plan Embrun",
+                "lastModifiedDate": [
+                    20140520,
+                    2014,
+                    5,
+                    20,
+                    7,
+                    10,
+                    430
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422139117,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1635@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140518,
+                    2014,
+                    5,
+                    18,
+                    20,
+                    52,
+                    1252
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "A55C6DF1-0A49-45AE-BEFA-FAD91A198BD1",
+                "order": 405128938
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "supprimer le profile it dans merlin-business",
+                "lastModifiedDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    7,
+                    59,
+                    479
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422866413,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1654@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140527,
+                    2014,
+                    5,
+                    27,
+                    7,
+                    59,
+                    479
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "B101002A-63E6-4D21-934E-5D52316F2F3F",
+                "order": null
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Ping pong tdd avec ricou en conf",
+                "lastModifiedDate": [
+                    20140419,
+                    2014,
+                    4,
+                    19,
+                    3,
+                    59,
+                    239
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 419572737,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1540@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140419,
+                    2014,
+                    4,
+                    19,
+                    3,
+                    59,
+                    239
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "BAE30FC0-F83B-4BC5-ADCD-1D9A80E0685A",
+                "order": 419572737
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "quasar",
+                "lastModifiedDate": [
+                    20140507,
+                    2014,
+                    5,
+                    7,
+                    12,
+                    40,
+                    760
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 421159203,
+                "dueDate": null,
+                "priority": 0,
+                "etag": "C=1578@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140507,
+                    2014,
+                    5,
+                    7,
+                    12,
+                    40,
+                    760
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "D4600870-AA20-4A66-A8A5-59AC54190799",
+                "order": null
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Randori akka airport",
+                "lastModifiedDate": [
+                    20140520,
+                    2014,
+                    5,
+                    20,
+                    7,
+                    10,
+                    430
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422003101,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1637@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140517,
+                    2014,
+                    5,
+                    17,
+                    7,
+                    5,
+                    425
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "D8B21D29-074F-48B2-829D-DEC0145D253B",
+                "order": 406893333
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "mettre \u00e0 jour mon cv xebia",
+                "lastModifiedDate": [
+                    20140526,
+                    2014,
+                    5,
+                    26,
+                    21,
+                    4,
+                    1264
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 422831065,
+                "dueDate": null,
+                "priority": 0,
+                "etag": "C=1650@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140526,
+                    2014,
+                    5,
+                    26,
+                    21,
+                    4,
+                    1264
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "DF0FD30F-AECE-4F97-9FF2-36A72D33EA61",
+                "order": null
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Graphe de migration Vidal update",
+                "lastModifiedDate": [
+                    20140520,
+                    2014,
+                    5,
+                    20,
+                    7,
+                    10,
+                    430
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 419572794,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1633@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140419,
+                    2014,
+                    4,
+                    19,
+                    3,
+                    59,
+                    239
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "EE8D1E0D-C619-4748-B0C1-5367D24C0C11",
+                "order": 401600148
+            },
+            {
+                "startDate": [
+                    20140627,
+                    2014,
+                    6,
+                    27,
+                    20,
+                    0,
+                    1200
+                ],
+                "description": null,
+                "recurrence": {
+                    "count": null,
+                    "byDay": null,
+                    "byMonth": null,
+                    "weekStart": "MO",
+                    "interval": 1,
+                    "weekDays": null,
+                    "frequencyDays": null,
+                    "freq": "monthly",
+                    "until": null
+                },
+                "title": "Payer Elena",
+                "lastModifiedDate": [
+                    20140430,
+                    2014,
+                    4,
+                    30,
+                    6,
+                    50,
+                    410
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 415614597,
+                "dueDate": [
+                    20140627,
+                    2014,
+                    6,
+                    27,
+                    20,
+                    0,
+                    1200
+                ],
+                "priority": null,
+                "etag": "C=1565@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": "Europe/Paris",
+                "createdDate": [
+                    20140304,
+                    2014,
+                    3,
+                    4,
+                    8,
+                    29,
+                    509
+                ],
+                "alarms": [
+                    {
+                        "description": "Event reminder",
+                        "isLocationBased": false,
+                        "proximity": null,
+                        "messageType": "message",
+                        "onDate": [
+                            20140627,
+                            2014,
+                            6,
+                            27,
+                            20,
+                            0,
+                            1200
+                        ],
+                        "measurement": null,
+                        "guid": "C54A7358-12DE-464A-9C79-9E5A4FAAB919"
+                    }
+                ],
+                "startDateIsAllDay": false,
+                "completedDate": null,
+                "guid": "F91DEECB-9125-4B98-819C-0F87FBEB4AA7",
+                "order": 417647351
+            },
+            {
+                "startDate": null,
+                "description": null,
+                "recurrence": null,
+                "title": "Xebiadb en micro service",
+                "lastModifiedDate": [
+                    20140419,
+                    2014,
+                    4,
+                    19,
+                    3,
+                    59,
+                    239
+                ],
+                "pGuid": "tasks",
+                "createdDateExtended": 419572767,
+                "dueDate": null,
+                "priority": null,
+                "etag": "C=1541@U=0fbd8cde-670e-4518-b9ae-e64c563c540c",
+                "dueDateIsAllDay": false,
+                "startDateTz": null,
+                "createdDate": [
+                    20140419,
+                    2014,
+                    4,
+                    19,
+                    3,
+                    59,
+                    239
+                ],
+                "alarms": [],
+                "startDateIsAllDay": true,
+                "completedDate": null,
+                "guid": "F996A0D3-04E8-4B8B-A81B-F90CDA072304",
+                "order": 419572767
+            }
+        ],
+        "InboxItem": [],
+        "Collections": [
+            {
+                "ctag": "FT=-@RU=0fbd8cde-670e-4518-b9ae-e64c563c540c@S=1659",
+                "title": "Rappels",
+                "color": "#b14bc9",
+                "enabled": true,
+                "symbolicColor": null,
+                "completedCount": 202,
+                "participants": null,
+                "collectionShareType": null,
+                "createdDate": [
+                    20111019,
+                    2011,
+                    10,
+                    19,
+                    6,
+                    7,
+                    367
+                ],
+                "createdDateExtended": null,
+                "guid": "tasks",
+                "emailNotification": null,
+                "order": 1
+            }
+        ]
+            };
+// a kind of map
+var createdDates = [];
+for (var i = 0; i < startup.Reminders.length; i++) {
+    createdDates.push(startup.Reminders[i].createdDate[0]);
+}
+
+var x = d3.scale.linear()
+        .domain([d3.min(createdDates), d3.max(createdDates)])
+        .range([0, 420]);
+
+var bar = d3.select(".chart")
+        .selectAll("div")
+        .data(startup.Reminders)
+        .enter().append("span")
+        .sort(function (firstReminder, secondReminder) { return secondReminder.createdDate[0] - firstReminder.createdDate[0]; });
+
+bar.append("div")
+        .style("width", function (reminder) {
+            if (reminder.completedDate == null) {
+                return 420 - x(reminder.createdDate[0]) + 'px';
+            }
+            return 420 + 'px'; })
+        .style("margin-left", function (reminder) { return x(reminder.createdDate[0]) + "px" })
+        .text("_");
+
+bar.append("span").text(function (reminder) {
+    return reminder.createdDate[3] + '/' + reminder.createdDate[2] + '/' + reminder.createdDate[1]
+            + ' ' + reminder.createdDate[4] + 'h ' + reminder.createdDate[5]
+            + ' ' + reminder.title;
+});
+</script>
 </body>
 </html>
