@@ -43,6 +43,13 @@ public class ReminderGraphTest {
     }
 
     @Test
+    public void should_read_completed_date() {
+        Reminder reminder = reminderGraph.getByGuid("1A6CE4B1-98ED-459F-ABA3-3301B43D9EC1");
+
+        assertThat(reminder.completedDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)).isEqualTo("2014-05-21T04:45:00");
+    }
+
+    @Test
     public void should_read_title() {
         Reminder reminder = reminderGraph.getByGuid("1A6CE4B1-98ED-459F-ABA3-3301B43D9EC1");
 
