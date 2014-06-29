@@ -20,8 +20,7 @@
 <script>
     var width = 200,
             height = 200,
-            graph = [1, 2, 3, 1, 4, 2, 4, 3],
-            computedGraph = [
+            reminders = [
                 {"taskId": 1, "startx": 0, "starty": 0, "steps": [3]},
                 {"taskId": 2, "startx": 1, "starty": 1, "steps": [2, 2]},
                 {"taskId": 3, "startx": 2, "starty": 2, "steps": [1, 2, 2]},
@@ -47,7 +46,7 @@
                     .style("width", width + "px")
                     .style("height", height + "px")
                     .selectAll("path")
-                    .data(computedGraph)
+                    .data(reminders)
                     .enter()
                     .append("path")
                     .attr("d", function (task, index) {
