@@ -18,31 +18,12 @@
 <div class="chart"></div>
 <script src="d3.v3.min.js"></script>
 <script>
-    var width = 200,
-            height = 200,
-            reminders = [
-                {"taskId": 1, "startx": 0, "starty": 0, "steps": [3]},
-                {"taskId": 2, "startx": 1, "starty": 1, "steps": [2, 2]},
-                {"taskId": 3, "startx": 2, "starty": 2, "steps": [1, 2, 2]},
-                {"taskId": 4, "startx": 4, "starty": 2, "steps": [1, 1]}
-            ],
+    var width = 12000,
+            height = 500,
             widthRange = 20,
             heightRange = 10,
-            color = function (taskId) {
-                if (taskId % 4 === 0) {
-                    return "red";
-                }
-                if (taskId % 4 === 1) {
-                    return "green";
-                }
-                if (taskId % 4 === 2) {
-                    return "blue";
-                }
-                if (taskId % 4 === 3) {
-                    return "magenta";
-                }
-            },
-            chartSvgTest = d3.select(".chart-svg-test")
+            reminders = d3.json("api/reminders", function (error, reminders) {
+                d3.select(".chart-svg-test")
                     .style("width", width + "px")
                     .style("height", height + "px")
                     .selectAll("path")
@@ -50,24 +31,25 @@
                     .enter()
                     .append("path")
                     .attr("d", function (task, index) {
+                        console.log(task);
                         var steps = "";
                         for (var i = 1; i < task.steps.length; i++) {
                             steps += " c " + widthRange / 2 + ",0 "
                                     + widthRange / 2 + "," + -heightRange + " "
                                     + widthRange + "," + -heightRange;
                             if (task.steps[i] > 1) {
-                                steps += " h " + (task.steps[i]-1) * widthRange
+                                steps += " h " + (task.steps[i] - 1) * widthRange
                             }
                         }
-                        return "m " + (task.startx * widthRange + 1) + "," + (task.starty * heightRange + 1)
+                        return "m " + (task.startX * widthRange + 1) + "," + (task.startY * heightRange + 1)
                                 + " h " + task.steps[0] * widthRange + steps;
                     })
                     .attr("stroke", function (task) {
-                        return color(task.taskId);
+                        return "#" + task.guid.substr(0, 6);
                     })
                     .attr("fill", "none")
-                    .attr("stroke-width", heightRange / 10)
-    ;
+                    .attr("stroke-width", heightRange / 10);
+            });
 </script>
 <!--<script>
 var x = d3.scale.linear()

@@ -1,8 +1,14 @@
 package name.lemerdy.sebastian.icloud.client;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
+@Path("/reminders")
 public class ReminderResource {
     private final SortedMap<ZonedDateTime, String> guidsSortedByDate;
     private Set<ReminderResourceResult> reminderResourceResults;
@@ -23,6 +29,8 @@ public class ReminderResource {
         return guidsSortedByDates;
     }
 
+    @GET
+    @Produces(APPLICATION_JSON)
     public Set<ReminderResourceResult> computeGraph() {
         int x = 0;
         int y = 0;
