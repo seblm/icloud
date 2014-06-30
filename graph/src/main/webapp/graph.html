@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <style>
-        .chart div {
-            font: 10px sans-serif;
-            background-color: steelblue;
-            text-align: right;
-            padding: 3px;
-            margin: 1px;
-            color: white;
-            float: left;
-        }
-    </style>
-</head>
 <body>
-<svg class="chart-svg-test"></svg>
-<div class="chart"></div>
+<svg class="chart"></svg>
 <script src="d3.v3.min.js"></script>
 <script>
     var width = 12000,
@@ -23,7 +9,7 @@
             widthRange = 20,
             heightRange = 10,
             reminders = d3.json("api/reminders", function (error, reminders) {
-                d3.select(".chart-svg-test")
+                d3.select(".chart")
                     .style("width", width + "px")
                     .style("height", height + "px")
                     .selectAll("path")
@@ -51,31 +37,5 @@
                     .attr("stroke-width", heightRange / 10);
             });
 </script>
-<!--<script>
-var x = d3.scale.linear()
-        .domain([d3.min(createdDates), d3.max(createdDates)])
-        .range([0, 420]);
-
-var bar = d3.select(".chart")
-        .selectAll("div")
-        .data(startup.Reminders)
-        .enter().append("span")
-        .sort(function (firstReminder, secondReminder) { return secondReminder.createdDate[0] - firstReminder.createdDate[0]; });
-
-bar.append("div")
-        .style("width", function (reminder) {
-            if (reminder.completedDate == null) {
-                return 420 - x(reminder.createdDate[0]) + 'px';
-            }
-            return 420 + 'px'; })
-        .style("margin-left", function (reminder) { return x(reminder.createdDate[0]) + "px" })
-        .text("_");
-
-bar.append("span").text(function (reminder) {
-    return reminder.createdDate[3] + '/' + reminder.createdDate[2] + '/' + reminder.createdDate[1]
-            + ' ' + reminder.createdDate[4] + 'h ' + reminder.createdDate[5]
-            + ' ' + reminder.title;
-});
-</script>-->
 </body>
 </html>
