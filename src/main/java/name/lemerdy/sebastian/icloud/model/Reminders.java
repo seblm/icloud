@@ -1,4 +1,4 @@
-package name.lemerdy.sebastian.icloud.graph;
+package name.lemerdy.sebastian.icloud.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;

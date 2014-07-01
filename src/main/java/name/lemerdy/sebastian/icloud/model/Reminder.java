@@ -1,7 +1,8 @@
-package name.lemerdy.sebastian.icloud.graph;
+package name.lemerdy.sebastian.icloud.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import name.lemerdy.sebastian.icloud.graph.ICloudDateTimeDeserializer;
 
 import java.time.ZonedDateTime;
 

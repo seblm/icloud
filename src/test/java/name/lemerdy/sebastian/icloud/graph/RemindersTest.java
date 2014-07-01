@@ -1,5 +1,7 @@
 package name.lemerdy.sebastian.icloud.graph;
 
+import name.lemerdy.sebastian.icloud.model.Reminder;
+import name.lemerdy.sebastian.icloud.model.Reminders;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

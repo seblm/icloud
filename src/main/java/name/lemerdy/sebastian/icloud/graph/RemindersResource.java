@@ -1,5 +1,8 @@
 package name.lemerdy.sebastian.icloud.graph;
 
+import name.lemerdy.sebastian.icloud.model.Reminder;
+import name.lemerdy.sebastian.icloud.model.Reminders;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -9,13 +12,17 @@ import java.util.*;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/reminders")
-public class ReminderResource {
-    private final SortedMap<ZonedDateTime, String> guidsSortedByDate;
-    private Set<ReminderResourceResult> reminderResourceResults;
+public class RemindersResource {
+    private final Set<ReminderResourceResult> reminderResourceResults = new LinkedHashSet<>();
 
-    public ReminderResource(Reminders reminders) {
-        this.guidsSortedByDate = guidsSortedByDates(reminders.reminders);
-        this.reminderResourceResults = new LinkedHashSet<>();
+    public RemindersResource(Reminders reminders) {
+        computeGraph(guidsSortedByDates(reminders.reminders));
+    }
+
+    @GET
+    @Produces(APPLICATION_JSON)
+    public Set<ReminderResourceResult> reminders() {
+        return reminderResourceResults;
     }
 
     private SortedMap<ZonedDateTime, String> guidsSortedByDates(List<Reminder> reminders) {
@@ -29,13 +36,11 @@ public class ReminderResource {
         return guidsSortedByDates;
     }
 
-    @GET
-    @Produces(APPLICATION_JSON)
-    public Set<ReminderResourceResult> computeGraph() {
+    private Set<ReminderResourceResult> computeGraph(SortedMap<ZonedDateTime, String> guidsSortedByDates) {
         int x = 0;
         int y = 0;
 
-        for (String guid : guidsSortedByDate.values()) {
+        for (String guid : guidsSortedByDates.values()) {
             ReminderResourceResult reminderResourceResult = getOrCreateGraphResourceResult(x, y, guid);
             reminderResourceResults.add(reminderResourceResult);
             y += (reminderResourceResult.isCompleted() ? -1 : 1);

@@ -1,7 +1,7 @@
 package name.lemerdy.sebastian.icloud.server;
 
-import name.lemerdy.sebastian.icloud.graph.ReminderResource;
-import name.lemerdy.sebastian.icloud.graph.Reminders;
+import name.lemerdy.sebastian.icloud.graph.RemindersResource;
+import name.lemerdy.sebastian.icloud.model.Reminders;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -11,6 +11,6 @@ import javax.ws.rs.ApplicationPath;
 public class RemindersApplication extends ResourceConfig {
     public RemindersApplication() {
         register(JacksonFeature.class)
-                .register(new ReminderResource(Reminders.readFromFile("/completed.json")));
+                .register(new RemindersResource(Reminders.readFromFile("/completed.json")));
     }
 }
