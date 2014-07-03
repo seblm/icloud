@@ -17,7 +17,6 @@
                     .enter()
                     .append("path")
                     .attr("d", function (task, index) {
-                        console.log(task);
                         var steps = "";
                         for (var i = 1; i < task.steps.length; i++) {
                             steps += " c " + widthRange / 2 + ",0 "
