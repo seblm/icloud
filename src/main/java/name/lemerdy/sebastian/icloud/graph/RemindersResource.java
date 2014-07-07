@@ -43,11 +43,20 @@ public class RemindersResource {
         for (String guid : guidsSortedByDates.values()) {
             ReminderResourceResult reminderResourceResult = getOrCreateGraphResourceResult(x, y, guid);
             reminderResourceResults.add(reminderResourceResult);
-            y += (reminderResourceResult.isCompleted() ? -1 : 1);
+            for (ReminderResourceResult resourceResult : reminderResourceResults) {
+                if (reminderResourceResult.isCompleted()) {
+                    resourceResult.thisResourceHasComplete(reminderResourceResult);
+                } else {
+                    resourceResult.aResourceHasBeenAdded();
+                }
+            }
+            y += reminderResourceResult.isCompleted() ? -1 : 1;
             x += 1;
         }
 
-        addStepForEachNotCompleted(x);
+        reminderResourceResults.stream()
+                .filter(reminderResourceResult -> !reminderResourceResult.isCompleted())
+                .forEach(ReminderResourceResult::complete);
 
         return reminderResourceResults;
     }
@@ -57,17 +66,7 @@ public class RemindersResource {
                 .filter(graphResource -> graphResource.guid.equals(guid))
                 .limit(1)
                 .peek(ReminderResourceResult::complete)
-                .peek(graphResource -> {
-                    graphResource.addStep(x);
-                    addStepForEachNotCompleted(x);
-                })
                 .findFirst()
                 .orElse(new ReminderResourceResult(guid, x, y));
-    }
-
-    private void addStepForEachNotCompleted(int x) {
-        reminderResourceResults.stream()
-                .filter(graphResource -> !graphResource.isCompleted())
-                .forEach(graphResource -> graphResource.addStep(x));
     }
 }

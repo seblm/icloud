@@ -4,36 +4,36 @@
 <svg class="chart"></svg>
 <script src="d3.v3.min.js"></script>
 <script>
-    var width = 12000,
-            height = 500,
-            widthRange = 20,
+    var width = 1400,
+            height = 600,
+            widthRange = 5,
             heightRange = 10,
             reminders = d3.json("api/reminders", function (error, reminders) {
                 d3.select(".chart")
-                    .style("width", width + "px")
-                    .style("height", height + "px")
-                    .selectAll("path")
-                    .data(reminders)
-                    .enter()
-                    .append("path")
-                    .attr("d", function (task, index) {
-                        var steps = "";
-                        for (var i = 1; i < task.steps.length; i++) {
-                            steps += " c " + widthRange / 2 + ",0 "
-                                    + widthRange / 2 + "," + -heightRange + " "
-                                    + widthRange + "," + -heightRange;
-                            if (task.steps[i] > 1) {
-                                steps += " h " + (task.steps[i] - 1) * widthRange
+                        .style("width", width + "px")
+                        .style("height", height + "px")
+                        .selectAll("path")
+                        .data(reminders)
+                        .enter()
+                        .append("path")
+                        .attr("d", function (task, index) {
+                            var steps = "";
+                            for (var i = 1; i < task.steps.length; i++) {
+                                steps += " c " + widthRange / 2 + ",0 "
+                                        + widthRange / 2 + "," + -heightRange + " "
+                                        + widthRange + "," + -heightRange;
+                                if (task.steps[i] > 1) {
+                                    steps += " h " + (task.steps[i] - 1) * widthRange
+                                }
                             }
-                        }
-                        return "m " + (task.startX * widthRange + 1) + "," + (task.startY * heightRange + 1)
-                                + " h " + task.steps[0] * widthRange + steps;
-                    })
-                    .attr("stroke", function (task) {
-                        return "#" + task.guid.substr(0, 6);
-                    })
-                    .attr("fill", "none")
-                    .attr("stroke-width", heightRange / 10);
+                            return "m " + (task.startX * widthRange + 1) + "," + (task.startY * heightRange + 1)
+                                    + " h " + task.steps[0] * widthRange + steps;
+                        })
+                        .attr("stroke", function (task) {
+                            return "#" + task.guid.substr(0, 6);
+                        })
+                        .attr("fill", "none")
+                        .attr("stroke-width", heightRange / 10);
             });
 </script>
 </body>

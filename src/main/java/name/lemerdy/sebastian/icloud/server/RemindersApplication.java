@@ -17,7 +17,6 @@ public class RemindersApplication extends ResourceConfig {
 
         this
                 .register(new JacksonFeatureWithObjectMapper(mapper))
-                .register(new RemindersResource(Reminders.readFromFile("/test.json")));
+                .register(new RemindersResource(Reminders.readFromFile("/completed.json")));
     }
-
 }

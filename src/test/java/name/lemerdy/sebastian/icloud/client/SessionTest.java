@@ -5,7 +5,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -52,7 +55,7 @@ public class SessionTest {
             try (OutputStream response = httpExchange.getResponseBody()) {
                 response.write(responseContent.getBytes());
             }
-            httpExchange.close() ;
+            httpExchange.close();
         });
         iCloudStub.setExecutor(null);
         iCloudStub.start();
