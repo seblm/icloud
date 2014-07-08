@@ -7,13 +7,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static java.lang.String.format;
+
 public class Session {
     private final URL loginURL;
-    private boolean logged;
+
+    private boolean logged = false;
 
     public Session(URL serverURL) {
         try {
-            this.loginURL = new URL(serverURL, "/setup/ws/1/login?clientBuildNumber=14C.131972&clientId=9D9BEA3F-FCB9-4F0C-923C-3EB365F97BC7");
+            this.loginURL = new URL(serverURL, "/setup/ws/1/login");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -23,22 +26,20 @@ public class Session {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) loginURL.openConnection();
-            String payload = "{\"apple_id\":\"myemail\",\"password\":\"mypassword\",\"extended_login\":false}";
+            String payload = format("{\"apple_id\":\"%s\",\"password\":\"%s\",\"extended_login\":false}", appleId, password);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "text/plain");
-            connection.setRequestProperty("Content-Length", "" + Integer.toString(payload.getBytes().length));
+            connection.setRequestProperty("Content-Length", "" + Integer.toString(payload.getBytes("UTF-8").length));
             connection.setRequestProperty("Origin", "https://www.icloud.com");
             connection.setUseCaches(false);
             connection.setDoInput(true);
             connection.setDoOutput(true);
 
-            //Send request
-            try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
-                wr.writeBytes(payload);
+            try (DataOutputStream requestContent = new DataOutputStream(connection.getOutputStream())) {
+                requestContent.writeUTF(payload);
             }
 
-            //Get Response
             try (BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String currentLine;
                 System.out.println("response :");

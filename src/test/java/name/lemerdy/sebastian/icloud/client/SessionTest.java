@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,18 +20,23 @@ public class SessionTest {
 
     private HttpServer iCloudStub;
 
+    public static void main(String[] args) throws IOException {
+        SessionTest sessionTest = new SessionTest();
+
+        sessionTest.createHttpServer();
+    }
+
     @Before
     public void createHttpServer() throws IOException {
-        iCloudStub = HttpServer.create(new InetSocketAddress(8080), 8080);
+        iCloudStub = HttpServer.create(new InetSocketAddress(8080), 0);
         iCloudStub.createContext("/setup/ws/1/login", httpExchange -> {
             try (BufferedReader request = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()))) {
-                System.out.println("request body :");
                 String currentLine = null;
                 while ((currentLine = request.readLine()) != null) {
-                    System.out.println(currentLine);
+                    System.out.format("request: %s%n", currentLine);
                 }
             }
-            String responseContent = "{" +
+            byte[] response = ("{" +
                     "\"isExtendedLogin\":false," +
                     "\"webservices\":{" +
                     "\"reminders\":{\"status\":\"active\",\"url\":\"https://p05-remindersws.icloud.com:443\"}," +
@@ -49,13 +55,11 @@ public class SessionTest {
                     "\"apps\":{\"mail\":{},\"reminders\":{},\"numbers\":{\"isQualifiedForBeta\":true},\"pages\":{\"isQualifiedForBeta\":true},\"notes\":{},\"find\":{},\"contacts\":{},\"calendar\":{},\"keynote\":{\"isQualifiedForBeta\":true}}," +
                     "\"requestInfo\":{\"timeZone\":\"GMT+1\",\"country\":\"FR\"}," +
                     "\"version\":1" +
-                    "}";
-            httpExchange.sendResponseHeaders(200, responseContent.length());
-
-            try (OutputStream response = httpExchange.getResponseBody()) {
-                response.write(responseContent.getBytes());
+                    "}").getBytes(Charset.forName("UTF-8"));
+            httpExchange.sendResponseHeaders(200, response.length);
+            try (OutputStream responseBody = httpExchange.getResponseBody()) {
+                responseBody.write(response);
             }
-            httpExchange.close();
         });
         iCloudStub.setExecutor(null);
         iCloudStub.start();
