@@ -1,8 +1,10 @@
 package name.lemerdy.sebastian.icloud.client;
 
-import java.io.BufferedReader;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import name.lemerdy.sebastian.icloud.client.model.LoginResponse;
+
 import java.io.DataOutputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +15,7 @@ public class Session {
     private final URL loginURL;
 
     private boolean logged = false;
+    private URL remindersURL;
 
     public Session(URL serverURL) {
         try {
@@ -20,6 +23,13 @@ public class Session {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public URL getRemindersURL() {
+        if (!isLogged()) {
+            throw new IllegalStateException("not logged");
+        }
+        return remindersURL;
     }
 
     public void login(String appleId, String password) {
@@ -40,13 +50,10 @@ public class Session {
                 requestContent.writeUTF(payload);
             }
 
-            try (BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                String currentLine;
-                System.out.println("response :");
-                while ((currentLine = rd.readLine()) != null) {
-                    System.out.println(currentLine);
-                }
-            }
+            LoginResponse loginResponse = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(connection.getInputStream(), LoginResponse.class);
+            this.remindersURL = loginResponse.webservices.reminders.url;
             this.logged = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,9 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -20,22 +18,10 @@ public class SessionTest {
 
     private HttpServer iCloudStub;
 
-    public static void main(String[] args) throws IOException {
-        SessionTest sessionTest = new SessionTest();
-
-        sessionTest.createHttpServer();
-    }
-
     @Before
     public void createHttpServer() throws IOException {
-        iCloudStub = HttpServer.create(new InetSocketAddress(8080), 0);
+        iCloudStub = HttpServer.create(new InetSocketAddress(0), 0);
         iCloudStub.createContext("/setup/ws/1/login", httpExchange -> {
-            try (BufferedReader request = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()))) {
-                String currentLine = null;
-                while ((currentLine = request.readLine()) != null) {
-                    System.out.format("request: %s%n", currentLine);
-                }
-            }
             byte[] response = ("{" +
                     "\"isExtendedLogin\":false," +
                     "\"webservices\":{" +
@@ -72,10 +58,20 @@ public class SessionTest {
 
     @Test
     public void should_login() throws MalformedURLException {
-        Session session = new Session(new URL("http://localhost:8080"));
+        Session session = new Session(new URL("http://localhost:" + iCloudStub.getAddress().getPort()));
 
         session.login("my_email@provider.net", "passw0rd");
 
         assertThat(session.isLogged()).isTrue();
+    }
+
+    @Test
+    public void should_get_reminder_url() throws MalformedURLException {
+        Session session = new Session(new URL("http://localhost:" + iCloudStub.getAddress().getPort()));
+        session.login("my_email@provider.net", "passw0rd");
+
+        URL remindersURL = session.getRemindersURL();
+
+        assertThat(remindersURL).isEqualTo(new URL("https://p05-remindersws.icloud.com:443"));
     }
 }
