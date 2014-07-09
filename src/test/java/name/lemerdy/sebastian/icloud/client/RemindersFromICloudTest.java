@@ -6,6 +6,9 @@ import name.lemerdy.sebastian.icloud.model.Reminder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,11 +20,14 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RemindersFromICloudTest {
     private HttpServer iCloudStub;
+
+    @Mock
+    private Session session;
 
     @Before
     public void createHttpServer() throws IOException {
@@ -60,7 +66,6 @@ public class RemindersFromICloudTest {
 
     @Test
     public void should_retrieve_reminders() throws MalformedURLException {
-        Session session = mock(Session.class);
         when(session.getRemindersURL()).thenReturn(new URL(format("http://localhost:%s", iCloudStub.getAddress().getPort())));
         RemindersFromICloud remindersFromICloud = new RemindersFromICloud(session);
 
