@@ -26,4 +26,14 @@ public class Reminder {
         this.completedDate = completedDate;
         this.title = title;
     }
+
+    @Override
+    public String toString() {
+        return "Reminder{" +
+                "guid='" + guid + '\'' +
+                ", createdDate=" + createdDate +
+                ", completedDate=" + completedDate +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

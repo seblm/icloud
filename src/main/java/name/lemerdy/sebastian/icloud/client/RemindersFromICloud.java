@@ -6,6 +6,7 @@ import name.lemerdy.sebastian.icloud.model.Reminder;
 import name.lemerdy.sebastian.icloud.model.Reminders;
 
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,21 @@ public class RemindersFromICloud {
         } finally {
             if (connection != null) {
                 connection.disconnect();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws MalformedURLException {
+        Session session = new Session(new URL("https://setup.icloud.com"));
+        session.login("s*b*s*i*n.l*m*r*y@provider.ext", "********");
+
+        System.out.println(session.isLogged());
+
+        if (session.isLogged()) {
+            List<Reminder> reminders = new RemindersFromICloud(session).reminders();
+
+            for (Reminder reminder : reminders) {
+                System.out.println(reminder);
             }
         }
     }
