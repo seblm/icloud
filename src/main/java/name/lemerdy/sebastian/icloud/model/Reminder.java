@@ -36,4 +36,29 @@ public class Reminder {
                 ", title='" + title + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Reminder reminder = (Reminder) o;
+
+        if (completedDate != null ? !completedDate.equals(reminder.completedDate) : reminder.completedDate != null)
+            return false;
+        if (!createdDate.equals(reminder.createdDate)) return false;
+        if (!guid.equals(reminder.guid)) return false;
+        if (!title.equals(reminder.title)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = guid.hashCode();
+        result = 31 * result + createdDate.hashCode();
+        result = 31 * result + (completedDate != null ? completedDate.hashCode() : 0);
+        result = 31 * result + title.hashCode();
+        return result;
+    }
 }

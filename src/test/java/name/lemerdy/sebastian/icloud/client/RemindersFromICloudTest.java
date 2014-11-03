@@ -16,6 +16,8 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -71,7 +73,15 @@ public class RemindersFromICloudTest {
 
         List<Reminder> reminders = remindersFromICloud.reminders();
 
-        assertThat(reminders).hasSize(2);
+        assertThat(reminders).containsExactly(
+                new Reminder("14B91359-3F5A-4FD2-800A-8E113BEDC51C",
+                        ZonedDateTime.of(2014, 6, 3, 7, 14, 0, 0, ZoneId.of("UTC")),
+                        null,
+                        "s'investir dans le tech event micro service"),
+                new Reminder("69D49AE8-926E-4095-A9DF-A4E3CECB2563",
+                        ZonedDateTime.of(2014, 7, 4, 21, 8, 0, 0, ZoneId.of("UTC")),
+                        ZonedDateTime.of(2014, 7, 4, 23, 8, 0, 0, ZoneId.of("UTC")),
+                        "Remplir mon CRA"));
     }
 
     private void writeResponse(HttpExchange httpExchange, String response) throws IOException {
